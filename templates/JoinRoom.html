@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Room</title>
+</head>
+<body>
+    <h1>Welcome to our Web Chat App</h1>
+    <h3>Please provide your username:</h3>
+    <form id="username-form">
+        <input type="text" id="username-input" autocomplete="off" placeholder="Enter Username">
+        <a href="WebSocketClients.html"><button type="submit">Enter Chat Room</button></a>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const form = document.getElementById('username-form');
+        const input = document.getElementById('username-input');
+
+        const storedUsername = localStorage.getItem('username');
+        if (storedUsername) {
+            input.value = storedUsername;
+        }
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = input.value.trim();
+            if (username !== '') {
+                localStorage.setItem('username', username);
+                socket.emit('message', username);
+
+                setTimeout(function() {
+                    window.location.href = 'http://127.0.0.1:5000/chat_room';
+                }, 300);
+            }
+        });
+    </script>
+    
+</body>
+</html>
+
